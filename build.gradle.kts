@@ -25,7 +25,11 @@ val buildAll = tasks.create("buildAll") {
     dependsOn(":v1_19:build")
     dependsOn(":v1_19_3:build")
     dependsOn(":v1_19_4:build")
+    dependsOn(":v1_20:build")
+    dependsOn(":v1_20_1:build")
     // This isn't working.... you still have to run each build individually
+    tasks.findByName(":v1_20:build")?.mustRunAfter(":v1_20_1:build")
+    tasks.findByName(":v1_19_4:build")?.mustRunAfter(":v1_20:build")
     tasks.findByName(":v1_19_3:build")?.mustRunAfter(":v1_19_4:build")
     tasks.findByName(":v1_19:build")?.mustRunAfter(":v1_19_3:build")
     tasks.findByName(":v1_18:build")?.mustRunAfter(":v1_19:build")
@@ -33,6 +37,14 @@ val buildAll = tasks.create("buildAll") {
 
     doLast {
         println("Copying files...")
+        file("v1_20_1/build/libs/v1_20_1.jar").copyTo(
+                file("build/${archives_base_name}-1.20.1-${mod_version}.jar"),
+                true
+        )
+        file("v1_20/build/libs/v1_20.jar").copyTo(
+                file("build/${archives_base_name}-1.20-${mod_version}.jar"),
+                true
+        )
         file("v1_19_4/build/libs/v1_19_4.jar").copyTo(
             file("build/${archives_base_name}-1.19.4-${mod_version}.jar"),
             true
